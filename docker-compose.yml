@@ -1,0 +1,90 @@
+version: '3'
+
+services:
+
+    arbiter:
+        container_name: shinken_arbiter
+        image: vietdien2005/shinken-webui2-base:latest
+        build: 
+            context: ./shinken
+        links:
+            - poller
+            - scheduler
+            - reactionner
+            - broker
+            - receiver
+            - mongo
+        command: "/usr/bin/shinken-arbiter -c /etc/shinken/shinken.cfg"
+        expose:
+            - "7770"
+        volumes:
+            - ./config/etc:/etc/shinken
+
+    poller:
+        container_name: shinken_poller
+        image: vietdien2005/shinken-webui2-base:latest
+        build: 
+            context: ./shinken
+        links:
+            - scheduler
+        expose:
+            - 7771
+        command: "/usr/bin/shinken-poller -c /etc/shinken/daemons/pollerd.ini"
+        volumes:
+            - ./config/etc:/etc/shinken
+
+    scheduler:
+        container_name: shinken_scheduler
+        image: vietdien2005/shinken-webui2-base:latest
+        build: 
+            context: ./shinken
+        links:
+            - mongo
+        expose:
+            - 7768
+        command: "/usr/bin/shinken-scheduler -c /etc/shinken/daemons/schedulerd.ini"
+        volumes:
+            - ./config/etc:/etc/shinken
+
+    reactionner:
+        container_name: shinken_reactionner
+        image: vietdien2005/shinken-webui2-base:latest
+        build: 
+            context: ./shinken
+        links:
+            - scheduler
+        expose:
+            - 7769
+        command: "/usr/bin/shinken-reactionner -c /etc/shinken/daemons/reactionnerd.ini"
+        volumes:
+            - ./config/etc:/etc/shinken
+
+    broker:
+        container_name: shinken_broker
+        image: vietdien2005/shinken-webui2-base:latest
+        build: 
+            context: ./shinken
+        command: "/usr/bin/shinken-broker -c /etc/shinken/daemons/brokerd.ini"
+        expose:
+            - "7772"
+        ports:
+            - 7767:7767
+        volumes:
+            - ./config/etc:/etc/shinken
+
+    receiver:
+        container_name: shinken_receiver
+        image: vietdien2005/shinken-webui2-base:latest
+        build: 
+            context: ./shinken
+        command: "/usr/bin/shinken-receiver -c /etc/shinken/daemons/receiverd.ini"
+        ports:
+            - 5667:5667
+        volumes:
+            - ./config/etc:/etc/shinken
+
+    mongo:
+        container_name: shinken_mongo
+        image: mongo
+        # volumes:
+        #     - ./data/mongo/data:/data/db
