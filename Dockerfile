@@ -51,5 +51,5 @@ RUN /usr/bin/shinken install webui2 && \
     /usr/bin/shinken install retention-mongodb && \
     /usr/bin/shinken install livestatus
 
-COPY ./config/telegram_notify.py /usr/local/bin/telegram_notify.py
+COPY ./telegram_notify.py /usr/local/bin/telegram_notify.py
 RUN chmod u+x /usr/local/bin/telegram_notify.py
