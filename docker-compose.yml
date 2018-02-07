@@ -6,7 +6,7 @@ services:
         container_name: shinken_arbiter
         image: vietdien2005/shinken-webui2-base:latest
         build: 
-            context: ./shinken
+            context: ./
         links:
             - poller
             - scheduler
@@ -19,12 +19,14 @@ services:
             - "7770"
         volumes:
             - ./config/etc:/etc/shinken
+        networks:
+            - backend
 
     poller:
         container_name: shinken_poller
         image: vietdien2005/shinken-webui2-base:latest
         build: 
-            context: ./shinken
+            context: ./
         links:
             - scheduler
         expose:
@@ -32,12 +34,14 @@ services:
         command: "/usr/bin/shinken-poller -c /etc/shinken/daemons/pollerd.ini"
         volumes:
             - ./config/etc:/etc/shinken
+        networks:
+            - backend
 
     scheduler:
         container_name: shinken_scheduler
         image: vietdien2005/shinken-webui2-base:latest
         build: 
-            context: ./shinken
+            context: ./
         links:
             - mongo
         expose:
@@ -45,12 +49,14 @@ services:
         command: "/usr/bin/shinken-scheduler -c /etc/shinken/daemons/schedulerd.ini"
         volumes:
             - ./config/etc:/etc/shinken
+        networks:
+            - backend
 
     reactionner:
         container_name: shinken_reactionner
         image: vietdien2005/shinken-webui2-base:latest
         build: 
-            context: ./shinken
+            context: ./
         links:
             - scheduler
         expose:
@@ -58,12 +64,14 @@ services:
         command: "/usr/bin/shinken-reactionner -c /etc/shinken/daemons/reactionnerd.ini"
         volumes:
             - ./config/etc:/etc/shinken
+        networks:
+            - backend
 
     broker:
         container_name: shinken_broker
         image: vietdien2005/shinken-webui2-base:latest
         build: 
-            context: ./shinken
+            context: ./
         command: "/usr/bin/shinken-broker -c /etc/shinken/daemons/brokerd.ini"
         expose:
             - "7772"
@@ -71,20 +79,31 @@ services:
             - 7767:7767
         volumes:
             - ./config/etc:/etc/shinken
+        networks:
+            - backend
+            - frontend
 
     receiver:
         container_name: shinken_receiver
         image: vietdien2005/shinken-webui2-base:latest
         build: 
-            context: ./shinken
+            context: ./
         command: "/usr/bin/shinken-receiver -c /etc/shinken/daemons/receiverd.ini"
         ports:
             - 5667:5667
         volumes:
             - ./config/etc:/etc/shinken
+        networks:
+            - backend
 
     mongo:
         container_name: shinken_mongo
         image: mongo
+        networks:
+            - backend
         # volumes:
         #     - ./data/mongo/data:/data/db
+
+networks:
+    frontend:
+    backend:
