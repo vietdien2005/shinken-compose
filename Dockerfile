@@ -2,6 +2,18 @@ FROM ubuntu:16.04
 
 MAINTAINER Dam Viet "vietdien2005@gmail.com"
 
+ARG BUILD_DATE
+ARG VCS_REF
+ARG VERSION
+LABEL org.label-schema.build-date=$BUILD_DATE \
+    org.label-schema.name="Shinken WebUI2 Base" \
+    org.label-schema.description="Simple base docker image for Shinken monitoring system with webui2, mongodb and notify with Telegram" \
+    org.label-schema.url="https://github.com/vietdien2005/shinken-compose" \
+    org.label-schema.vcs-ref=$VCS_REF \
+    org.label-schema.vcs-url="https://github.com/vietdien2005/shinken-compose" \
+    org.label-schema.version=$VERSION \
+    org.label-schema.schema-version="1.0"
+
 # Install deps and create shinken user
 RUN apt-get update && \
     apt-get install -y \
