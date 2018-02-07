@@ -3,7 +3,7 @@
 ![Demo Image](https://raw.githubusercontent.com/vietdien2005/shinken-compose/master/image.png)
 
 # Docker Shinken WebUI2
-Simple base docker image for Shinken monitoring system with webui2, mongodb
+Simple base docker image for Shinken monitoring system with webui2, mongodb and notify with Telegram
 
 ## Running
 
