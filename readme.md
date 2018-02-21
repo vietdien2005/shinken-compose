@@ -16,7 +16,7 @@ And go to http://localhost:7767 and login with:
 - Username: admin
 - Password: admin
 
-## Config 
+## Config
 
 - All config file in folder config, you just edit it & restart with command:
 ```
